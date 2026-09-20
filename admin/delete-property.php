@@ -1,0 +1,1 @@
+<?php require '../includes/bootstrap.php';require_admin();if($_SERVER['REQUEST_METHOD']==='POST'&&csrf_ok()){$pdo->prepare('DELETE FROM properties WHERE id=?')->execute([(int)$_POST['id']]);$_SESSION['flash']='Объект удалён.';}header('Location: index.php');
