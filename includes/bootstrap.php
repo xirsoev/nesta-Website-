@@ -19,5 +19,7 @@ function csrf(): string { if (empty($_SESSION['csrf'])) $_SESSION['csrf']=bin2he
 function csrf_ok(): bool { return hash_equals($_SESSION['csrf'] ?? '', $_POST['csrf'] ?? ''); }
 function flash(): ?string { $f=$_SESSION['flash']??null; unset($_SESSION['flash']); return $f; }
 function favorite_ids(PDO $pdo): array { if(!logged_in()) return []; $s=$pdo->prepare('SELECT property_id FROM favorites WHERE user_id=?'); $s->execute([user()['id']]); return array_map('intval', $s->fetchAll(PDO::FETCH_COLUMN)); }
-function property_title(string $title): string { return ['Modern Apartment'=>'Современная квартира','Ocean View Residence'=>'Резиденция с видом на океан','Minimal House'=>'Минималистичный дом','Downtown Loft'=>'Лофт в центре','Family Residence'=>'Семейная резиденция','Luxury Villa'=>'Роскошная вилла'][$title] ?? $title; }
+function property_title(string $title): string { return ['Modern Apartment'=>'Современная квартира','Ocean View Residence'=>'Дом у воды','Minimal House'=>'Минималистичный дом','Downtown Loft'=>'Городской лофт','Family Residence'=>'Дом для семьи','Luxury Villa'=>'Загородная вилла'][$title] ?? $title; }
 function property_type(string $type): string { return ['Apartment'=>'Квартира','House'=>'Дом','Villa'=>'Вилла','Loft'=>'Лофт'][$type] ?? $type; }
+function property_location(array $property): string { return 'Приморский край · точный адрес скрыт'; }
+function property_rooms(array $property): string { $rooms=(int)($property['rooms']??0); return $rooms>0 ? $rooms.' комн.' : 'Планировка уточняется'; }
