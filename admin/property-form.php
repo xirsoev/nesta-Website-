@@ -1,8 +1,10 @@
 <?php
 require '../includes/bootstrap.php'; require_admin();
 $id=(int)($_GET['id']??0);
-$p=['title'=>'','description'=>'','city'=>'','address'=>'','price'=>'','area'=>'','rooms'=>'','type'=>'Квартира','image'=>'','status'=>'active'];
+$p=['title'=>'','description'=>'','city'=>'','address'=>'','price'=>'','area'=>'','rooms'=>'','type'=>'Apartment','image'=>'','status'=>'active'];
 if($id){$s=$pdo->prepare('SELECT * FROM properties WHERE id=?');$s->execute([$id]);$p=$s->fetch()?:exit('Объект не найден.');}
+$typeOptions=['Apartment'=>'Квартира','House'=>'Дом','Villa'=>'Вилла','Loft'=>'Лофт'];
+$selectedType=['Квартира'=>'Apartment','Дом'=>'House','Вилла'=>'Villa','Лофт'=>'Loft'][$p['type']]??$p['type'];
 $errors=[];
 if($_SERVER['REQUEST_METHOD']==='POST'){
     if(!csrf_ok())$errors[]='Некорректный запрос.';
@@ -17,5 +19,5 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
 }
 $page_title=$id?'Редактирование объекта':'Новый объект'; require '../includes/header.php';
 ?>
-<main class="auth-wrap wide"><form class="auth-card" method="post"><p class="eyebrow">Админ-панель</p><h1><?=e($page_title)?></h1><?php foreach($errors as $error):?><p class="error"><?=e($error)?></p><?php endforeach?><input type="hidden" name="csrf" value="<?=csrf()?>"><?php foreach(['title'=>'Название','city'=>'Город','address'=>'Адрес','price'=>'Цена','area'=>'Площадь (м²)','rooms'=>'Комнаты','image'=>'Ссылка на изображение'] as $key=>$label):?><label><?=$label?><input name="<?=$key?>" value="<?=e((string)$p[$key])?>"></label><?php endforeach?><label>Тип недвижимости<select name="type"><?php foreach(['Квартира','Дом','Вилла','Лофт'] as $type):?><option <?=$p['type']===$type?'selected':''?>><?=$type?></option><?php endforeach?></select></label><label>Статус<select name="status"><option value="active" <?=$p['status']==='active'?'selected':''?>>Активен</option><option value="draft" <?=$p['status']==='draft'?'selected':''?>>Черновик</option></select></label><label>Описание<textarea name="description" rows="5"><?=e($p['description'])?></textarea></label><button class="block">Сохранить объект</button></form></main>
+<main class="auth-wrap wide"><form class="auth-card" method="post"><p class="eyebrow">Админ-панель</p><h1><?=e($page_title)?></h1><?php foreach($errors as $error):?><p class="error"><?=e($error)?></p><?php endforeach?><input type="hidden" name="csrf" value="<?=csrf()?>"><?php foreach(['title'=>'Название','city'=>'Город','address'=>'Адрес','price'=>'Цена','area'=>'Площадь (м²)','rooms'=>'Комнаты','image'=>'Ссылка на изображение'] as $key=>$label):?><label><?=$label?><input name="<?=$key?>" value="<?=e((string)$p[$key])?>"></label><?php endforeach?><label>Тип недвижимости<select name="type"><?php foreach($typeOptions as $value=>$label):?><option value="<?=e($value)?>" <?=$selectedType===$value?'selected':''?>><?=e($label)?></option><?php endforeach?></select></label><label>Статус<select name="status"><option value="active" <?=$p['status']==='active'?'selected':''?>>Активен</option><option value="draft" <?=$p['status']==='draft'?'selected':''?>>Черновик</option></select></label><label>Описание<textarea name="description" rows="5"><?=e($p['description'])?></textarea></label><button class="block">Сохранить объект</button></form></main>
 <?php require '../includes/footer.php'; ?>
