@@ -6,7 +6,7 @@
 
 Веб-платформа недвижимости с каталогом объектов и инструментами для удобного выбора.
 
-[Открыть репозиторий ↗](https://github.com/xirsoev/nesta-Website-)
+[Открыть сайт ↗](https://nesta.kesug.com) · [Исходный код ↗](https://github.com/xirsoev/nesta-Website-)
 
 </div>
 
